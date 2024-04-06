@@ -1,11 +1,8 @@
 package com.nure.ua.aiconsultant.controller;
 
-import com.google.gson.Gson;
 import com.nure.ua.aiconsultant.dto.ChatGPTRequest;
 import com.nure.ua.aiconsultant.dto.ChatGptResponse;
 import com.nure.ua.aiconsultant.service.LLMService;
-import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.store.embedding.EmbeddingMatch;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -84,21 +80,10 @@ public class CustomBotController {
 
     @GetMapping("/get-answer-fragments")
     public ResponseEntity<List<String>> getAnswerFragments(@RequestParam("question") String question){
-        List<EmbeddingMatch<TextSegment>> contentFromDoc = llmService.getContentFromDoc(question);
-        contentFromDoc.forEach(content->{
-            System.out.println(new Gson().toJson(content));
-        });
+        List<String> contentFromDoc = llmService.getContentFromDoc1(question);
+        contentFromDoc.forEach(System.out::println);
 
-
-        List<String> stringList = new ArrayList<>();
-        for (EmbeddingMatch<TextSegment> match : contentFromDoc) {
-            TextSegment textSegment = match.embedded();
-            String text = textSegment.text();
-            stringList.add(text);
-        }
-
-
-        return new ResponseEntity<>(stringList, OK);
+        return new ResponseEntity<>(contentFromDoc, OK);
     }
 
 }
