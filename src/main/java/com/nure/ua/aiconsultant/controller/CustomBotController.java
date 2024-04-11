@@ -85,5 +85,12 @@ public class CustomBotController {
 
         return new ResponseEntity<>(contentFromDoc, OK);
     }
+    @GetMapping("/get-answer-fragments1")
+    public ResponseEntity<List<String>> getAnswerFragments1(@RequestParam("question") String question){
+        List<String> contentFromDoc = llmService.getContentFromDoc(question);
+        contentFromDoc.forEach(System.out::println);
+
+        return new ResponseEntity<>(contentFromDoc, OK);
+    }
 
 }
