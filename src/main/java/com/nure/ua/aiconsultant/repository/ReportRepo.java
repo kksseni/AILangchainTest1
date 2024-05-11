@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReportRepo extends JpaRepository<Report, Long> {
-    @Query("select avg(r.rate) from Report r")
+    @Query("select avg(r.reportRate) from Report r")
     Double getAvgRate();
+    Report findFirstByUserIdOrderByReportDateDesc(Long userId);
 }

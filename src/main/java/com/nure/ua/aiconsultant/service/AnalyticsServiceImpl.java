@@ -27,4 +27,9 @@ public class AnalyticsServiceImpl implements AnalyticsService{
     public void update(Report report) {
         reportRepo.save(report);
     }
+
+    @Override
+    public Report getPrevByChatId(Long id) {
+        return reportRepo.findFirstByUserIdOrderByReportDateDesc(id);
+    }
 }

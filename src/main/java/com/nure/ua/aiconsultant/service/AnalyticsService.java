@@ -6,4 +6,5 @@ public interface AnalyticsService {
     Double getAvgRate();
     void insert(Report report);
     void update(Report report);
+    Report getPrevByChatId(Long id);
 }
