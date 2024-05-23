@@ -57,3 +57,5 @@ public class OpenAiConfiguration {
         return PromptTemplate.from(promptTemplate);
     }
 }
+
+

@@ -22,7 +22,7 @@ public class CustomBotController {
 
     @GetMapping("/get-answer")
     public ResponseEntity<String> getAnswerConvModel(@RequestParam("question") String question){
-        String contentConvModel = llmService.getContentConvModel(question);
+        String contentConvModel = llmService.getAnswer(question);
         return new ResponseEntity<>(contentConvModel, OK);
     }
 

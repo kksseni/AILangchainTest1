@@ -12,8 +12,12 @@ public class LLMService {
         this.conversationalRetrievalChain = conversationalRetrievalChain;
     }
 
-    public String getContentConvModel(String question) {
+    public String getAnswer(String question) {
         return conversationalRetrievalChain.execute(question);
     }
 
 }
+
+
+
+

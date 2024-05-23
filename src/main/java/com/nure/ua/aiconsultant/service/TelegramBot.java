@@ -53,7 +53,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 log.info("Replied to user " + update.getMessage().getChat().getFirstName());
                 sendMessage(chatId, answer, createInlineKeyboard());
             } else {
-                answer = llmService.getContentConvModel(update.getMessage().getText());
+                answer = llmService.getAnswer(update.getMessage().getText());
                 saveReport(update, answer, chatId);
                 sendMessage(chatId, answer, null);
                 sendMessage(chatId, "Оцініть відповідь бота:", createRatingKeyboard());
