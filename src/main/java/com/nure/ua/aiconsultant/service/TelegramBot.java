@@ -34,6 +34,10 @@ public class TelegramBot extends TelegramLongPollingBot {
     static final String QUESTION_TEXT = """
                                     Яке питання тебе цікавить?
                                     """;
+    static final String LIMIT_TEXT = """
+                                    На жаль, ви вичерпали свій ліміт питань на годину.
+                                    Спробуйте задати питання пізніше.
+                                    """;
 
     public TelegramBot(BotConfig bot, LLMService llmService, AnalyticsService analyticsService) {
         this.bot = bot;
@@ -52,7 +56,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                 answer = String.format(INTRO_TEXT, update.getMessage().getChat().getFirstName());
                 log.info("Replied to user " + update.getMessage().getChat().getFirstName());
                 sendMessage(chatId, answer, createInlineKeyboard());
-            } else {
+            } else if (isLimit(chatId)){
+                answer = LIMIT_TEXT;
+                sendMessage(chatId, answer, null);
+            }
+            else {
                 answer = llmService.getAnswer(update.getMessage().getText());
                 saveReport(update, answer, chatId);
                 sendMessage(chatId, answer, null);
@@ -63,6 +71,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             chatId = update.getCallbackQuery().getMessage().getChatId();
             switch (callbackData) {
                 case "ask_question":
+                    if (isLimit(chatId)){
+                        answer = LIMIT_TEXT;
+                        sendMessage(chatId, answer, null);
+                        break;//????????????????
+                    }
                     answer = QUESTION_TEXT;
                     sendMessage(chatId, answer, null);
                     break;
@@ -97,6 +110,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         return answer;
     }
 
+    private boolean isLimit(Long userId){
+        Long numOfMessagesPerHour = analyticsService.getNumOfMessagesPerHour(userId);
+        return numOfMessagesPerHour>=20;
+    }
     private void saveReport(Update update, String answer, Long chatId) {
         Report report = Report.builder()
                 .reportDate(LocalDateTime.now())

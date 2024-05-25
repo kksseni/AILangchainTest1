@@ -6,5 +6,6 @@ public interface AnalyticsService {
     Double getAvgRate();
     void insert(Report report);
     void update(Report report);
+    Long getNumOfMessagesPerHour(Long userId);
     Report getPrevByChatId(Long id);
 }

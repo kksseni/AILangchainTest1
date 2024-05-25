@@ -4,6 +4,8 @@ import com.nure.ua.aiconsultant.domain.Report;
 import com.nure.ua.aiconsultant.repository.ReportRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AnalyticsServiceImpl implements AnalyticsService{
 
@@ -26,6 +28,13 @@ public class AnalyticsServiceImpl implements AnalyticsService{
     @Override
     public void update(Report report) {
         reportRepo.save(report);
+    }
+
+    @Override
+    public Long getNumOfMessagesPerHour(Long userId) {
+        LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
+        reportRepo.getNumOfMessagesPerHour(userId, oneHourAgo);
+        return null;
     }
 
     @Override
